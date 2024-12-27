@@ -1,6 +1,6 @@
 require("dotenv").config();
 const express = require("express");
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const cors = require("cors");
 const app = express();
 const port = process.env.PORT || 5000;
@@ -22,8 +22,29 @@ async function run() {
   try {
     // await client.connect();
 
-    const database = client.db("Database");
-    const collection = database.collection("example");
+    // Artifacts Related
+    const database = client.db("ArtifactsDB");
+    const artifactsCollection = database.collection("ArtifactsData");
+
+    app.post("/artifacts", async (req, res) => {
+      const artifacts = req.body;
+      const result = await artifactsCollection.insertOne(artifacts);
+      res.send(result);
+    });
+
+    app.get("/artifacts", async (req, res) => {
+      const result = await artifactsCollection.find().toArray();
+      res.send(result);
+    });
+
+    app.get("/each-artifact-details/:id", async (req, res) => {
+      const id = req.params.id;
+      const result = await artifactsCollection.findOne({
+        _id: new ObjectId(id),
+      });
+
+      res.send(result);
+    });
 
     // await client.db("admin").command({ ping: 1 });
     console.log(
