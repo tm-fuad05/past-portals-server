@@ -22,10 +22,11 @@ async function run() {
   try {
     // await client.connect();
 
-    // Artifacts Related
     const database = client.db("ArtifactsDB");
     const artifactsCollection = database.collection("ArtifactsData");
+    const MyArtifactCollection = database.collection("My Artifacts");
 
+    // All Artifacts
     app.post("/artifacts", async (req, res) => {
       const artifacts = req.body;
       const result = await artifactsCollection.insertOne(artifacts);
@@ -44,6 +45,17 @@ async function run() {
       });
 
       res.send(result);
+    });
+
+    //My Artifacts
+    app.get("/my-artifacts", async (req, res) => {
+      const email = req.query.email;
+      const myArtifacts = await artifactsCollection
+        .find({
+          artifactAdderEmail: email,
+        })
+        .toArray();
+      res.send(myArtifacts);
     });
 
     // await client.db("admin").command({ ping: 1 });
