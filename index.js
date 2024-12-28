@@ -47,6 +47,30 @@ async function run() {
       res.send(result);
     });
 
+    app.patch("/artifacts/:id", async (req, res) => {
+      const id = req.params.id;
+      const myArtifact = req.body;
+      const options = { upser: true };
+      const updatedMyArtifactData = {
+        $set: {
+          artifactName: myArtifact.artifactName,
+          artifactImage: myArtifact.artifactImage,
+          artifactType: myArtifact.artifactType,
+          historicalContext: myArtifact.historicalContext,
+          createdAt: myArtifact.createdAt,
+          discoveredAt: myArtifact.discoveredAt,
+          discoveredBy: myArtifact.discoveredBy,
+          presentLocation: myArtifact.presentLocation,
+        },
+      };
+      const result = await artifactsCollection.updateOne(
+        { _id: new ObjectId(id) },
+        updatedMyArtifactData,
+        options
+      );
+      res.send(result);
+    });
+
     //My Artifacts
     app.get("/my-artifacts", async (req, res) => {
       const email = req.query.email;
