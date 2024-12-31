@@ -24,7 +24,7 @@ async function run() {
 
     const database = client.db("ArtifactsDB");
     const artifactsCollection = database.collection("ArtifactsData");
-    const MyArtifactCollection = database.collection("My Artifacts");
+    const likedArtifactCollection = database.collection("Liked Artifacts");
 
     // All Artifacts
     app.post("/artifacts", async (req, res) => {
@@ -88,6 +88,26 @@ async function run() {
         })
         .toArray();
       res.send(myArtifacts);
+    });
+
+    app.post("/likedArtifacts", async (req, res) => {
+      const likedArtifact = req.body;
+      const result = await likedArtifactCollection.insertOne(likedArtifact);
+      res.send(result);
+    });
+
+    app.get("/likedArtifacts", async (req, res) => {
+      const result = await likedArtifactCollection.find().toArray();
+      res.send(result);
+    });
+
+    // My Liked Artifacts
+    app.get("/my-liked-artifacts", async (req, res) => {
+      const email = req.query.email;
+      const result = await likedArtifactCollection
+        .find({ likedEmail: email })
+        .toArray();
+      res.send(result);
     });
 
     // await client.db("admin").command({ ping: 1 });
