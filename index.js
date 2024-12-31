@@ -34,7 +34,16 @@ async function run() {
     });
 
     app.get("/artifacts", async (req, res) => {
-      const result = await artifactsCollection.find().toArray();
+      const search = req.query.search;
+
+      let query = {
+        artifactName: {
+          $regex: search,
+          $options: "i",
+        },
+      };
+
+      const result = await artifactsCollection.find(query).toArray();
       res.send(result);
     });
 
