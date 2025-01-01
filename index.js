@@ -33,6 +33,16 @@ async function run() {
       res.send(result);
     });
 
+    // Limited 6 data (highest like Count)
+    app.get("/highest-like-count", async (req, res) => {
+      const result = await artifactsCollection
+        .find()
+        .sort({ likeCount: -1 })
+        .limit(6)
+        .toArray();
+      res.send(result);
+    });
+
     app.get("/artifacts", async (req, res) => {
       const search = req.query.search;
 
