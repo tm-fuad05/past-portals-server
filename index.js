@@ -2,11 +2,19 @@ require("dotenv").config();
 const express = require("express");
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const cors = require("cors");
+const jwt = require("jsonwebtoken");
+const cookieParser = require("cookie-parser");
 const app = express();
 const port = process.env.PORT || 5000;
 
-app.use(cors());
+app.use(
+  cors({
+    origin: ["http://localhost:5173"],
+    credentials: true,
+  })
+);
 app.use(express.json());
+app.use(cookieParser());
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.dmsil.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
@@ -26,6 +34,29 @@ async function run() {
     const artifactsCollection = database.collection("ArtifactsData");
     const likedArtifactCollection = database.collection("Liked Artifacts");
 
+    // JWT Api
+    app.post("/jwt", (req, res) => {
+      const user = req.body;
+      const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+        expiresIn: "5h",
+      });
+      res
+        .cookie("token", token, {
+          httpOnly: true,
+          secure: false,
+        })
+        .send({ success: true });
+    });
+
+    app.post("/logout", (req, res) => {
+      res
+        .clearCookie("token", {
+          httpOnly: true,
+          secure: false,
+        })
+        .send({ success: true });
+    });
+
     // All Artifacts
     app.post("/artifacts", async (req, res) => {
       const artifacts = req.body;
@@ -44,11 +75,11 @@ async function run() {
     });
 
     app.get("/artifacts", async (req, res) => {
-      const search = req.query.search || "";
+      const search = req.query.search;
 
       let query = {
         artifactName: {
-          $regex: search.toString(),
+          $regex: search,
           $options: "i",
         },
       };
