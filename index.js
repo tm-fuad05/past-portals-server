@@ -44,11 +44,11 @@ async function run() {
     });
 
     app.get("/artifacts", async (req, res) => {
-      const search = req.query.search;
+      const search = req.query.search || "";
 
       let query = {
         artifactName: {
-          $regex: search,
+          $regex: search.toString(),
           $options: "i",
         },
       };
