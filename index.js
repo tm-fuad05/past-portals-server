@@ -171,8 +171,12 @@ async function run() {
     });
 
     // My Liked Artifacts
-    app.get("/my-liked-artifacts", async (req, res) => {
+    app.get("/my-liked-artifacts", verifyToken, async (req, res) => {
       const email = req.query.email;
+      if (req.user.email !== email) {
+        return res.status(403).send({ message: "Forbiddedn access" });
+      }
+
       const result = await likedArtifactCollection
         .find({ likedEmail: email })
         .toArray();
