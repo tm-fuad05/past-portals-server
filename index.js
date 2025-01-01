@@ -16,6 +16,21 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
+const verifyToken = (req, res, next) => {
+  const token = req.cookies?.token;
+  if (!token) {
+    return res.status(401).send({ message: "Unauthorized access" });
+  }
+
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, function (err, decoded) {
+    if (err) {
+      return res.status(401).send({ message: "Unauthorized access" });
+    }
+    req.user = decoded;
+    next();
+  });
+};
+
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.dmsil.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 const client = new MongoClient(uri, {
@@ -130,8 +145,12 @@ async function run() {
     });
 
     //My Artifacts
-    app.get("/my-artifacts", async (req, res) => {
+    app.get("/my-artifacts", verifyToken, async (req, res) => {
       const email = req.query.email;
+      if (req.user.email !== email) {
+        return res.status(403).send({ message: "Forbiddedn access" });
+      }
+
       const myArtifacts = await artifactsCollection
         .find({
           artifactAdderEmail: email,
