@@ -9,9 +9,13 @@ const port = process.env.PORT || 5000;
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://assignment-11-22249.web.app"],
+    origin: [
+      "http://localhost:5173",
+      "https://assignment-11-22249.web.app",
+      "https://pastportals-nu.vercel.app",
+    ],
     credentials: true,
-  })
+  }),
 );
 app.use(express.json());
 app.use(cookieParser());
@@ -133,7 +137,7 @@ async function run() {
       const result = await artifactsCollection.updateOne(
         { _id: new ObjectId(id) },
         updatedMyArtifactData,
-        options
+        options,
       );
       res.send(result);
     });
@@ -187,7 +191,7 @@ async function run() {
 
     // await client.db("admin").command({ ping: 1 });
     console.log(
-      "Pinged your deployment. You successfully connected to MongoDB!"
+      "Pinged your deployment. You successfully connected to MongoDB!",
     );
   } finally {
     // await client.close();
