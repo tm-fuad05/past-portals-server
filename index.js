@@ -12,7 +12,7 @@ app.use(
     origin: [
       "http://localhost:5173",
       "https://assignment-11-22249.web.app",
-      "https://pastportalsbd.vercel.app/",
+      "https://pastportalsbd.vercel.app",
     ],
     credentials: true,
   }),
