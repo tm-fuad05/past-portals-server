@@ -8,7 +8,7 @@ import {
   eachArtifactGET,
   highestLikeArtifactGET,
   myArtifactsGET,
-} from "../controllers/artifacts.controllers.js";
+} from "../controllers/artifacts.controller.js";
 const router = express.Router();
 
 //! Specific Routes
@@ -24,4 +24,4 @@ router.get("/:id", eachArtifactGET);
 router.patch("/:id", verifyToken, artifactsPATCH);
 router.delete("/:id", verifyToken, artifactsDELETE);
 
-export default router;
+export const ArtifactRouter = router;
