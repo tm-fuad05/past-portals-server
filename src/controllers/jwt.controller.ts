@@ -7,7 +7,7 @@ export const cookieOptions: CookieOptions = {
   sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
 };
 
-export function tokenCreate(req: Request, res: Response) {
+function tokenCreate(req: Request, res: Response) {
   const user = req.body;
   const secret = process.env.ACCESS_TOKEN_SECRET!;
   const token = jwt.sign(user, secret, {
@@ -15,9 +15,14 @@ export function tokenCreate(req: Request, res: Response) {
   });
   res
     .cookie("token", token, cookieOptions)
-    .send({ success: true, message: "Token" });
+    .send({ success: true, message: "Successfully Logged in!" });
 }
 
-export function tokenRemove(req: Request, res: Response) {
+function tokenRemove(req: Request, res: Response) {
   res.clearCookie("token", cookieOptions).send({ success: true });
 }
+
+export const JwtController = {
+  tokenCreate,
+  tokenRemove,
+};
