@@ -18,14 +18,12 @@ async function getAllArtifactsFromDB(search: string) {
     };
   }
 
-  const artifacts = await Artifact.find(query).select("-likedBy").lean();
+  const artifacts = await Artifact.find(query).lean();
   return artifacts;
 }
 
 async function getArtifactByIdFromDB(artifactId: string) {
-  const artifact = await Artifact.findById(artifactId)
-    .select("-likedBy")
-    .lean();
+  const artifact = await Artifact.findById(artifactId).lean();
   return artifact;
 }
 
