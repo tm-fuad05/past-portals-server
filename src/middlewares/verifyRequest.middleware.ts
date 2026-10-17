@@ -28,7 +28,6 @@ export const verifyRequest = (schema: RequestValidationSchema | ZodType) => {
         return res.status(400).json({
           success: false,
           message: "Validation Error",
-          //   errors2: error.issues,
           errors: error.issues.map((err) => ({
             field: err.path[0],
             message: err.message,
