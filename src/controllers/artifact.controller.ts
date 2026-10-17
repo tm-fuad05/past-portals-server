@@ -145,6 +145,17 @@ async function editArtifact(req: Request, res: Response) {
 
     const updatedMyArtifactData = req.body;
 
+    const existingArtifact = await ArtifactService.getArtifactByIdFromDB(
+      artifactId as string,
+    );
+
+    if (req.user?.email !== existingArtifact?.artifactAdderEmail) {
+      return res.status(403).json({
+        success: false,
+        message: "Forbidden access. You can't edit another person's data!",
+      });
+    }
+
     const result = await ArtifactService.editArtifactFromDB(
       artifactId as string,
       updatedMyArtifactData,
@@ -177,6 +188,17 @@ async function deleteArtifact(req: Request, res: Response) {
 
     if (!ObjectId.isValid(artifactId as string)) {
       return res.status(400).send({ message: "Invalid Artifact ID" });
+    }
+
+    const existingArtifact = await ArtifactService.getArtifactByIdFromDB(
+      artifactId as string,
+    );
+
+    if (req.user?.email !== existingArtifact?.artifactAdderEmail) {
+      return res.status(403).json({
+        success: false,
+        message: "Forbidden access. You can't delete another person's data!",
+      });
     }
 
     const result = await ArtifactService.deleteArtifactFromDB(
