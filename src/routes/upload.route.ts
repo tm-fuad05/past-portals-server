@@ -13,7 +13,7 @@ const upload = multer({
 router.post(
   "/artifacts",
   upload.single("image"),
-  // verifyToken,
+  verifyToken,
   UploadController.uploadArtifactImage,
 );
 
