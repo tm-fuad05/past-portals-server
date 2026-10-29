@@ -43,7 +43,7 @@ past-portals-server/
 │   ├── model/              # Mongoose schemas and models
 │   │   └── artifactSchema.ts
 │   ├── routes/             # API route declarations
-│   │   ├── artifact.routes.ts
+│   │   ├── artifact.route.ts
 │   │   ├── jwt.route.ts
 │   │   └── likedArtifact.route.ts
 │   ├── services/           # Core business logic and database queries

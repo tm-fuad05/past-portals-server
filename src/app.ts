@@ -1,11 +1,11 @@
 import { JwtRouter } from "./routes/jwt.route.js";
-import { ArtifactRouter } from "./routes/artifact.routes.js";
+import { ArtifactRouter } from "./routes/artifact.route.js";
 import { LikedArtifactRouter } from "./routes/likedArtifact.route.js";
 
 import express, { Application } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import verifyToken from "./middlewares/verifyToken.middleware.js";
+import { UploadRouter } from "./routes/upload.route.js";
 const app: Application = express();
 
 app.use(
@@ -24,6 +24,8 @@ app.use("/api/v1/auth", JwtRouter);
 app.use("/api/v1/artifacts", ArtifactRouter);
 // Liked Artifacts Api
 app.use("/api/v1/liked-artifacts", LikedArtifactRouter);
+// Cloudinary upload image
+app.use("/api/v1/upload-image", UploadRouter);
 
 app.get("/", (_, res) => {
   res.send({
