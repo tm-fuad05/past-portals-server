@@ -17,11 +17,6 @@ router.post(
   UploadController.uploadArtifactImage,
 );
 
-router.post(
-  "/users",
-  upload.single("image"),
-  verifyToken,
-  UploadController.uploadUserImage,
-);
+router.post("/users", upload.single("image"), UploadController.uploadUserImage);
 
 export const UploadRouter = router;
