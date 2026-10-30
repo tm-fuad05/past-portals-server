@@ -44,4 +44,13 @@ app.get("/", (_, res) => {
   });
 });
 
+app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+  console.error("Server Error:", err);
+  res.status(500).json({
+    success: false,
+    message: err?.message || "Internal Server Error",
+    stack: process.env.NODE_ENV === "production" ? undefined : err?.stack,
+  });
+});
+
 export default app;
