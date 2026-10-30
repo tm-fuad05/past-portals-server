@@ -26,7 +26,11 @@ const createArtifactSchema = z.object({
   likedBy: z.array(z.email({ error: "Invalid email" }).trim()).default([]),
 });
 
-const updateArtifactSchema = createArtifactSchema.partial();
+const updateArtifactSchema = createArtifactSchema.partial().omit({
+  artifactAdderEmail: true,
+  artifactAdderName: true,
+  likedBy: true,
+});
 
 const querySchema = z.object({
   search: z.string({ error: "Search query must be string" }).trim().optional(),
