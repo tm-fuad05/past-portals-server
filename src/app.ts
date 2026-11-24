@@ -28,14 +28,16 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 
+// API Routes
+app.use("/api/v1", root);
 // Jwt Api
-app.use("/api/v1/auth", JwtRouter);
+root.use("/auth", JwtRouter);
 // Artifacts Api
-app.use("/api/v1/artifacts", ArtifactRouter);
+root.use("/artifacts", ArtifactRouter);
 // Liked Artifacts Api
-app.use("/api/v1/liked-artifacts", LikedArtifactRouter);
+root.use("/liked-artifacts", LikedArtifactRouter);
 // Cloudinary upload image
-app.use("/api/v1/upload-image", UploadRouter);
+root.use("/upload-image", UploadRouter);
 
 app.get("/", (_, res) => {
   res.send({
