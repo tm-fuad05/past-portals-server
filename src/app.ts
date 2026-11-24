@@ -7,7 +7,9 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import { UploadRouter } from "./routes/upload.route.js";
 import { connectDB } from "./config/dbConnect.js";
+
 const app: Application = express();
+const root = express.Router();
 
 app.use(async (_req, _res, next) => {
   try {
